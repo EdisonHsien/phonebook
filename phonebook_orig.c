@@ -24,5 +24,5 @@ entry *append(char lastName[], entry *e)
     strcpy(e->lastName, lastName);
     e->pNext = NULL;
 
-    return e;
+    return e;    //Single pointer should return a pointer , but double pointer doesn't need
 }
