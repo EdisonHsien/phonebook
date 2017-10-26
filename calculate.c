@@ -3,6 +3,7 @@
 
 int main(void)
 {
+
     FILE *fp = fopen("orig.txt", "r");
     FILE *output = fopen("output.txt", "w");
     if (!fp) {

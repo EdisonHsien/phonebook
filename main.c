@@ -58,6 +58,7 @@ int main(int argc, char *argv[])
             i++;
         line[i - 1] = '\0';
         i = 0;
+
         e = append(line, e);
     }
     clock_gettime(CLOCK_REALTIME, &end);

@@ -28,15 +28,64 @@ entry *append(char lastName[], entry *e)
 }
 
 
-unsigned int BKDRHash(char *str)
+unsigned int BKDRHash(char lastName[])
 {
-    unsigned int seed = 31;
+    unsigned int seed = 131;
     unsigned int hash = 0;
+    int i = 0;
 
-    while(*str)
-        hash = hash * seed + (*str++);
+    while(i<strlen(lastName)) {
+        hash = hash * seed +lastName[i];
+        i++;
 
-
-    return (hash % MAX_TABLE_SIZE);
-
+    }
+    return (hash & 0x7FFFFFFF) % MAX_TABLE_SIZE;
 }
+
+entry *findName_Hash(char lastName[], entry *pHead)
+{
+
+    unsigned int n = BKDRHash(lastName);
+    n %= MAX_TABLE_SIZE;
+    entry *tmp;
+    if(pHead[n]->pNext)
+        tmp = pHead[n]->pNext;
+    else
+        return NULL;
+    while(tmp) {
+        if(strcasecmp(lastName, tmp->lastName) = 0)
+            return tmp;
+        tmp = tmp -> pNext;
+    }
+    return NULL;
+}
+
+m_pool *pool_allocate(int size)
+{
+    m_pool *pool = (m_pool *)malloc(sizeof(m_pool));
+    pool->head = pool->next = (char *)calloc(1,size);
+    pool ->tail = pool->head +size;
+    return pool;
+}
+
+
+void *pool_access(m_pool *pool, int size)
+{
+    if(pool->tail - pool->next <size)
+        return NULL;
+
+    void *tmp = pool->next;
+    pool->next = pool->next + size;
+    return tmp;
+}
+
+
+void free_list(entry *e)
+{
+    entry *tmp;
+    while((tmp = e) != NULL) {
+        e = e->pNext;
+        free(tmp);
+    }
+}
+
